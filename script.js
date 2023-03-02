@@ -39,7 +39,11 @@ function setRandomColor(isInitial){
       return
     }
     // let color = chroma.random()
-    const color = isInitial ? colors[index] : generateRandomColor()
+    const color = isInitial 
+    ? colors[index] 
+      ? colors[index]
+      : generateRandomColor()
+    : generateRandomColor()
    
     if(!isInitial){
       colors.push(color)
