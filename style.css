@@ -31,6 +31,7 @@ html, body{
 }
 
 .btn__lock{
+  outline: none;
   font-size: 1.5rem;
   transition: 0.3s;
   padding: 10px;
@@ -57,7 +58,6 @@ html, body{
   }
   .col{
     box-sizing: border-box;
-    border: 1px solid black;
     width: 100%;
     height: 500px;
     margin: 0;

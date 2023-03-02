@@ -1,18 +1,60 @@
 const cols = document.querySelectorAll(".col")
 const button = document.querySelector(".update__btn")
 
+document.addEventListener("keydown", (event) => {
+  event.preventDefault()
+  if (event.code === "Space"){
+    setRandomColor()
+  }
+})
 
-function setRandomColor(){
-  cols.forEach(col => {
+document.addEventListener('click', (event) => {
+  const type = event.target.dataset.type
+
+
+  if (type === "lock"){
+
+    const node = event.target.tagName.toLowerCase() == "i"
+    ? event.target
+    : event.target.children[0]
+    node.classList.toggle("fa-lock-open")
+    node.classList.toggle("fa-lock")
+  }else if(type === "copy"){
+    copyToClipBoard(event.target.textContent)
+  }
+  
+})
+
+function setRandomColor(isInitial){
+  const colors = isInitial ? getColorsFromHash() : []
+
+  cols.forEach((col, index) => {
+    
     const text = col.querySelector('.color__text')
     const button = col.querySelector(".btn__lock")
-    let color = chroma.random()
-    // let color = generateRandomColor()
+    let isLocked = col.querySelector('i').classList.contains("fa-lock")
+
+    if (isLocked){
+      colors.push(text.textContent)
+      return
+    }
+    // let color = chroma.random()
+    const color = isInitial ? colors[index] : generateRandomColor()
+   
+    if(!isInitial){
+      colors.push(color)
+    }
+   
     text.textContent = color
     col.style.background = color
     setTextColor(text, color)
     setButtonColor(button, color)
   })
+  updateColorHash(colors)
+}
+
+function copyToClipBoard(text){
+  return navigator.clipboard.writeText(text)
 }
 
 function generateRandomColor(){
@@ -35,6 +77,23 @@ function setButtonColor(button, color){
   button.style.color = luminance > 0.5 ? "black" : "white"
 }
 
-setRandomColor()
+function updateColorHash(colors = []){
+  document.location.hash = colors
+  .map((color) => {
+    return color
+    .toString()
+    .substring(1)
+  }).join("-")
+}
 
-button.addEventListener('click', setRandomColor)
+function getColorsFromHash(){
+  if(document.location.hash.length > 1){
+    return document.location.hash
+    .substring(1)
+    .split("-")
+    .map(color => "#" + color)
+  }
+  return []
+}
+
+setRandomColor(true)
