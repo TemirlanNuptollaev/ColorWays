@@ -21,6 +21,8 @@ document.addEventListener('click', (event) => {
     node.classList.toggle("fa-lock")
   }else if(type === "copy"){
     copyToClipBoard(event.target.textContent)
+  }else if(type === "random__color"){
+    setRandomColor()
   }
   
 })
